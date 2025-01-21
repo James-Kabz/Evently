@@ -3,25 +3,44 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "seed": "dotenv -- sequelize-cli db:seed:all ",
+    "seed:one": "dotenv -- sequelize-cli db:seed --seed ",
+    "seed:rolleback": "dotenv -- sequelize-cli db:seed:undo ",
+    "seed:rolleback:all": "dotenv -- sequelize-cli db:seed:undo:all",
+    "migration:create": "dotenv -- sequelize-cli migration:create --name",
+    "seeder:create": "dotenv -- sequelize-cli seed:generate --name",
+    "migrate": "dotenv -- sequelize-cli db:migrate",
+    "migrate:one": "dotenv -- sequelize-cli db:migrate --name",
+    "migrate:rollback": "dotenv -- sequelize-cli db:migrate:undo",
+    "migrate:rollback:all": "dotenv -- sequelize-cli db:migrate:undo:all",
+    "email": "email dev"
   },
   "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "mysql2": "^3.12.0",
+    "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.5"
+    "sequelize": "^6.37.5",
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
-    "@eslint/eslintrc": "^3"
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
   }
 }
