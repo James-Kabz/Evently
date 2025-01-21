@@ -61,7 +61,7 @@ TicketType.init(
   },
   {
     sequelize,
-    modelName: "TicketTypes",
+    modelName: "TicketType",
     tableName: "TicketTypes",
     timestamps: true,
   }

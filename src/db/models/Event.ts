@@ -1,5 +1,4 @@
 import sequelize from "../db_connection";
-// model for Event
 import { DataTypes, Model } from "sequelize";
 import { User } from "./User";
 
@@ -11,6 +10,7 @@ export class Event extends Model {
   end_time!: Date;
   image!: string;
   location!: string;
+  user_id!: number;
 
   user?: User;
 }
@@ -60,8 +60,8 @@ Event.init(
   },
   {
     sequelize,
-    modelName: "Events",
-    tableName: "Users",
+    modelName: "Event",
+    tableName: "Events",
     timestamps: true,
   }
 );

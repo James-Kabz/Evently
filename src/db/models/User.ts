@@ -6,7 +6,7 @@ export class User extends Model {
   id!: number;
   email!: string;
   password!: string;
-  roleId!: number;
+  // roleId!: number;
 }
 
 User.init(
