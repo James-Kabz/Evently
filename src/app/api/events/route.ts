@@ -9,7 +9,7 @@ export async function GET() {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { message: "Error fetching event", error: errorMessage },
+      { message: "Error fetching events", error: errorMessage },
       { status: 500 }
     );
   }
