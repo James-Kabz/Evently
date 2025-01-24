@@ -2,17 +2,16 @@ import { Event } from "@/db/models/Event";
 import { User } from "@/db/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
-interface Context {
-  params: { eventId: string };
-}
-
-export async function GET(req: NextRequest, context: Context) {
+// GET - Fetch an Event by ID
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { eventId: string } }
+) {
   try {
-    const { eventId } = context.params;
+    const { eventId } = await params; // Await params here
+
     const event = await Event.findOne({
-      where: {
-        id: eventId,
-      },
+      where: { id: eventId },
       include: [
         {
           model: User,
@@ -21,6 +20,7 @@ export async function GET(req: NextRequest, context: Context) {
         },
       ],
     });
+
     if (!event) {
       return NextResponse.json({ message: "Event not found" }, { status: 404 });
     }
@@ -29,71 +29,28 @@ export async function GET(req: NextRequest, context: Context) {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({
-      message: "error fetching event",
-      error: errorMessage,
-    });
+    return NextResponse.json(
+      { message: "Error fetching event", error: errorMessage },
+      { status: 500 }
+    );
   }
 }
 
-// update event
-// export async function PUT(req: NextRequest, context: Context) {
-//   try {
-//     const { eventId } = context.params;
-//     const {
-//       name,
-//       description,
-//       start_time,
-//       end_time,
-//       image,
-//       location,
-//       user_id,
-//     } = await req.json();
-
-//     const event = await Event.findByPk(eventId);
-
-//     if (!event) {
-//       return NextResponse.json({ message: "Event not found" });
-//     }
-
-//     event.name = name;
-//     event.description = description;
-//     event.start_time = start_time;
-//     event.end_time = end_time;
-//     event.image = image;
-//     event.location = location;
-//     event.user_id = user_id;
-
-//     await event.save();
-
-//     return NextResponse.json({ message: "Event Updated Successfully", event });
-//   } catch (error) {
-//     const errorMessage =
-//       error instanceof Error ? error.message : "Unknown error";
-//     return NextResponse.json(
-//       { message: "Error updating Event", error: errorMessage },
-//       { status: 500 }
-//     );
-//   }
-// }
-
-
-export async function PUT(req: NextRequest, context: Context) {
+// PUT - Update an Event by ID
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { eventId: string } }
+) {
   try {
-    const params = await context.params; // Await params to avoid sync issues
-    const { eventId } = params;
-
-    // Parse the incoming JSON data
+    const { eventId } = await params; // Await params here
     const updatedFields = await req.json();
 
-    // Find the existing event by its ID
     const event = await Event.findByPk(eventId);
 
     if (!event) {
       return NextResponse.json({ message: "Event not found" }, { status: 404 });
     }
 
-    // Optional: Validate and filter allowed fields
     const allowedFields = [
       "name",
       "description",
@@ -104,17 +61,15 @@ export async function PUT(req: NextRequest, context: Context) {
       "user_id",
     ];
 
-    const filteredUpdates = {};
-    for (const [key, value] of Object.entries(updatedFields)) {
-      if (allowedFields.includes(key)) {
-        filteredUpdates[key] = value;
-      }
-    }
+    // Only update allowed fields
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updatedFields).filter(([key]) =>
+        allowedFields.includes(key)
+      )
+    );
 
-    // Update only the allowed fields provided in the request
     Object.assign(event, filteredUpdates);
 
-    // Save the updated event to the database
     await event.save();
 
     return NextResponse.json({
@@ -125,17 +80,19 @@ export async function PUT(req: NextRequest, context: Context) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { message: "Error updating Event", error: errorMessage },
+      { message: "Error updating event", error: errorMessage },
       { status: 500 }
     );
   }
 }
-// delete event
 
-export async function DELETE(req: NextRequest, context: Context) {
+// DELETE - Delete an Event by ID
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { eventId: string } }
+) {
   try {
-    const params = await context.params; // Await the params
-    const { eventId } = params;
+    const { eventId } = await params; // Await params here
 
     const event = await Event.findByPk(eventId);
 
