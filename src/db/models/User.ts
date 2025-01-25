@@ -4,6 +4,7 @@ import sequelize from "../db_connection";
 
 export class User extends Model {
   id!: number;
+  name!:string;
   email!: string;
   password!: string;
   // roleId!: number;
@@ -15,6 +16,10 @@ User.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     email: {

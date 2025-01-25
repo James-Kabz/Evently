@@ -1,5 +1,6 @@
 export interface User {
   id: number;
+  name:string;
   email: string;
   password: string;
 }
@@ -13,6 +14,12 @@ export interface Event {
   image: string;
   location: string;
   user_id: number;
+  user: {
+    id: number;
+    name:string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface TicketType {
