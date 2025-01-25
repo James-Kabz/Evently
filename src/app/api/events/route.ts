@@ -1,10 +1,19 @@
 import { Event } from "@/db/models/Event";
+import { User } from "@/db/models/User";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const event = await Event.findAll();
-    return NextResponse.json({ event });
+    const events = await Event.findAll({
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+    return NextResponse.json({ events });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
@@ -28,19 +37,19 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
     const event = await Event.create({
-          name,
-          description,
-          start_time,
-          end_time,
-          image,
-          location,
-          user_id
+      name,
+      description,
+      start_time,
+      end_time,
+      image,
+      location,
+      user_id,
     });
 
     return NextResponse.json({
-          message: 'Event Created Successfully',
-          event,
-    })
+      message: "Event Created Successfully",
+      event,
+    });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
