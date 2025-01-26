@@ -6,6 +6,8 @@ export interface User {
 }
 
 export interface Event {
+  statusColor: string;
+  eventStatus: string;
   id: number;
   name: string;
   description: string;

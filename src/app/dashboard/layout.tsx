@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation'; // App Router useRouter
+import { useRouter } from 'next/navigation';
 import {
           RiDashboard2Fill,
           RiUserLine,
@@ -20,7 +20,7 @@ import Loading from './loading';
 import istLogo from '../../../public/assets/image/tickfy.jpg';
 import Image from 'next/image';
 import { showToast } from '@/components/ToastMessage';
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 type EventsTicketsDashboardLayoutProps = {
@@ -29,14 +29,13 @@ type EventsTicketsDashboardLayoutProps = {
 
 const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> = ({ children }) => {
           const path = usePathname();
-          const router = useRouter(); // Router instance for programmatic navigation
-          const [activeTab, setActiveTab] = useState<string>(''); // Default to 'Dashboard' tab
-          const [currentView, setCurrentView] = useState<string>(''); // For toggling between view/create
-          const [sidebarOpen, setSidebarOpen] = useState<boolean>(false); // State to manage sidebar visibility
-          const [menuOpen, setMenuOpen] = useState<boolean>(false); // State to menu visibility
+          const router = useRouter();
+          const [activeTab, setActiveTab] = useState<string>('');
+          const [currentView, setCurrentView] = useState<string>('');
+          const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+          const [menuOpen, setMenuOpen] = useState<boolean>(false);
           const [currentPath, setCurrentPath] = useState<string>('');
 
-          // Function to handle logout
           const handleLogout = async () => {
                     try {
                               localStorage.clear();
@@ -57,15 +56,13 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                     const savedPath = localStorage.getItem("currentPath");
 
                     if (savedTab && savedView && savedPath) {
-                              // All required values are in localStorage
                               setActiveTab(savedTab);
                               setCurrentView(savedView);
                               router.push(savedPath);
                     } else {
-                              // Defaults to Dashboard
                               const defaultTab = "Dashboard";
                               const defaultView = "view";
-                              const defaultPath = "/dashboard"; // Adjust this to your default path
+                              const defaultPath = "/dashboard";
 
                               setActiveTab(defaultTab);
                               setCurrentView(defaultView);
@@ -78,7 +75,6 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
 
           useEffect(() => {
                     setCurrentPath(path);
-                    // Save to localStorage if activeTab, currentView, and currentPath exist
                     if (activeTab && currentView && currentPath) {
                               localStorage.setItem("activeTab", activeTab);
                               localStorage.setItem("currentView", currentView);
@@ -86,7 +82,6 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                     }
           }, [activeTab, currentView, currentPath, path]);
 
-          // Main tabs data with view/create links
           const tabs = [
                     {
                               name: 'Dashboard',
@@ -155,20 +150,17 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                     },
           ];
 
-          // Get the currently active tab details
           const activeTabDetails = tabs.find((tab) => tab.name === activeTab);
 
-          // Set the active tab and view, and update the URL path
           const handleTabChange = (tabName: string, view: string) => {
                     const tab = tabs.find((t) => t.name === tabName);
                     if (tab) {
-                              setActiveTab(tab.name); // Set the active tab
-                              setCurrentView(view); // Set the view mode (view/create)
-
+                              setActiveTab(tab.name);
+                              setCurrentView(view);
                               const newPath: string | undefined = view === 'view' ? tab.viewLink : tab.createLink;
                               if (newPath) {
-                                        router.push(newPath); // Navigate to the new path
-                                        setSidebarOpen(false); // Close sidebar on navigation
+                                        router.push(newPath);
+                                        setSidebarOpen(false);
                               }
                     }
           };
@@ -179,7 +171,6 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                         <ToastContainer />
 
                                         {/* Sidebar for Mobile */}
-                                        {/* Overlay */}
                                         {sidebarOpen && (
                                                   <div
                                                             className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -189,10 +180,10 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
 
                                         {/* Sidebar */}
                                         <div
-                                                  className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white z-50 transform transition-transform duration-300 lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                                                  className={`fixed top-0 left-0 h-full w-64 bg-secondary text-foreground z-50 transform transition-transform duration-300 lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                                                             }`}
                                         >
-                                                  <div className="flex items-center justify-between p-1 bg-gray-800 w-full overflow-x-hidden white-space-nowrap">
+                                                  <div className="flex items-center justify-between p-1 bg-secondary w-full overflow-x-hidden white-space-nowrap">
                                                             <div className="flex justify-center items-center">
                                                                       <Image
                                                                                 className="w-[100px] h-[75px]"
@@ -203,7 +194,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                       />
                                                             </div>
                                                             <button
-                                                                      className="text-white focus:outline-none m-3"
+                                                                      className="text-foreground focus:outline-none m-3"
                                                                       onClick={() => setSidebarOpen(false)}
                                                             >
                                                                       <FaTimes size={20} />
@@ -217,7 +208,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                                           <li key={tab.name}>
                                                                                                     <button
                                                                                                               onClick={() => handleTabChange(tab.name, 'view')}
-                                                                                                              className={`flex items-center w-full p-2 rounded hover:bg-gray-700 ${activeTab === tab.name ? 'bg-gray-700' : ''} transition-colors`}
+                                                                                                              className={`flex items-center w-full p-2 rounded hover:bg-primary hover:text-white ${activeTab === tab.name ? 'bg-primary text-white' : 'bg-secondary text-foreground'} transition-colors`}
                                                                                                     >
                                                                                                               <span>{tab.sideIcon}</span>
                                                                                                               <span className="ml-2">{tab.name}</span>
@@ -228,7 +219,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                                           <li key={tab.name}>
                                                                                                     <button
                                                                                                               onClick={() => handleTabChange(tab.name, 'view')}
-                                                                                                              className={`flex items-center w-full p-2 rounded hover:bg-gray-700 ${activeTab === tab.name ? 'bg-gray-700' : ''} transition-colors`}
+                                                                                                              className={`flex items-center w-full p-2 rounded hover:bg-primary hover:text-white ${activeTab === tab.name ? 'bg-primary text-white' : 'bg-secondary text-foreground'} transition-colors`}
                                                                                                     >
                                                                                                               <span>{tab.sideIcon}</span>
                                                                                                               <span className="ml-2">{tab.name}</span>
@@ -238,7 +229,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                                 <li>
                                                                                           <button
                                                                                                     onClick={handleLogout}
-                                                                                                    className="flex items-center w-full p-2 rounded hover:bg-gray-700 transition-colors"
+                                                                                                    className="flex items-center w-full p-2 rounded hover:bg-error hover:text-white transition-colors"
                                                                                           >
                                                                                                     <FaPowerOff size={20} />
                                                                                                     <span className="ml-2">Logout</span>
@@ -252,7 +243,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                         {/* Main Content */}
                                         <div className="flex flex-col flex-1">
                                                   {/* Header */}
-                                                  <header className="flex items-center justify-between bg-gray-800 text-white p-4 lg:hidden">
+                                                  <header className="flex items-center justify-between bg-secondary text-foreground p-4 lg:hidden">
                                                             <div className="mb-1 d flex justify-center items-center">
                                                                       <Image
                                                                                 className="w-[100px] h-[75px]"
@@ -263,7 +254,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                       />
                                                             </div>
                                                             <button
-                                                                      className="text-white focus:outline-none"
+                                                                      className="text-foreground focus:outline-none"
                                                                       onClick={() => setSidebarOpen(true)}
                                                             >
                                                                       <FaBars size={24} />
@@ -271,14 +262,14 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                   </header>
 
                                                   {/* Top Navigation for Large Screens */}
-                                                  <nav className="hidden lg:flex justify-between bg-gray-800 text-white p-4 shadow-lg">
+                                                  <nav className="hidden lg:flex justify-between bg-secondary text-foreground p-4 shadow-lg">
                                                             <ul className="flex w-full items-center justify-between">
                                                                       {tabs.map((tab) => (
                                                                                 <li key={tab.name}>
                                                                                           <div className="relative group inline-block">
                                                                                                     <button
-                                                                                                              onClick={() => handleTabChange(tab.name, 'view')} // Navigate to view mode
-                                                                                                              className={`p-2 rounded ${activeTab === tab.name ? 'bg-gray-600' : 'hover:bg-gray-700'} transition-colors`}
+                                                                                                              onClick={() => handleTabChange(tab.name, 'view')}
+                                                                                                              className={`p-2 rounded ${activeTab === tab.name ? 'bg-primary text-white' : 'hover:bg-primary hover:text-white'} transition-colors`}
                                                                                                     >
                                                                                                               <div className="flex flex-col items-center">
                                                                                                                         <span className='m-1'>{tab.icon}</span>
@@ -291,7 +282,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                       <li>
                                                                                 <button
                                                                                           onClick={() => setMenuOpen(!menuOpen)}
-                                                                                          className="flex flex-col items-center p-2 rounded hover:bg-gray-700 transition-colors"
+                                                                                          className="flex flex-col items-center p-2 rounded hover:bg-primary hover:text-white transition-colors"
                                                                                 >
                                                                                           <span><PiUserCircleDuotone size={40} /></span>
                                                                                           <span className="ml-2">My Profile</span>
@@ -343,19 +334,19 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
 
                                                   {/* Sub-tabs for View/Create */}
                                                   {activeTabDetails && (
-                                                            <div className="bg-gray-200 p-4 flex space-x-2">
+                                                            <div className="bg-secondary p-4 flex space-x-2">
                                                                       {activeTabDetails.viewLabel && (
                                                                                 <button
-                                                                                          onClick={() => handleTabChange(activeTab, 'view')} // Switch to view mode
-                                                                                          className={`p-2 rounded ${currentView === 'view' ? 'bg-gray-600 text-white' : 'bg-gray-300 hover:bg-gray-400'} transition-colors`}
+                                                                                          onClick={() => handleTabChange(activeTab, 'view')}
+                                                                                          className={`p-2 rounded ${currentView === 'view' ? 'bg-primary text-white' : 'bg-background hover:bg-primary hover:text-white'} transition-colors`}
                                                                                 >
                                                                                           {activeTabDetails.viewLabel}
                                                                                 </button>
                                                                       )}
                                                                       {activeTabDetails.createLabel && (
                                                                                 <button
-                                                                                          onClick={() => handleTabChange(activeTab, 'create')} // Switch to create mode
-                                                                                          className={`p-2 rounded ${currentView === 'create' ? 'bg-gray-600 text-white' : 'bg-gray-300 hover:bg-gray-400'} transition-colors`}
+                                                                                          onClick={() => handleTabChange(activeTab, 'create')}
+                                                                                          className={`p-2 rounded ${currentView === 'create' ? 'bg-primary text-white' : 'bg-background hover:bg-primary hover:text-white'} transition-colors`}
                                                                                 >
                                                                                           {activeTabDetails.createLabel}
                                                                                 </button>
@@ -367,7 +358,6 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                   <main className="flex-grow p-2 bg-background text-foreground">
                                                             {currentView === 'view' && (
                                                                       <div>
-                                                                                {/* Render the content for viewing */}
                                                                                 {children}
                                                                       </div>
                                                             )}
@@ -375,7 +365,6 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                             {currentView === 'create' && (
                                                                       <div>
                                                                                 <h2 className="text-xl font-bold">{activeTabDetails?.createLabel}</h2>
-                                                                                {/* Render the content for creating */}
                                                                                 {children}
                                                                       </div>
                                                             )}

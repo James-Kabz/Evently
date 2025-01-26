@@ -19,11 +19,11 @@ module.exports = {
         allowNull: true,
       },
       start_time: {
-        type: Sequelize.TIME,
+        type: Sequelize.DATE,
         allowNull: false,
       },
       end_time: {
-        type: Sequelize.TIME,
+        type: Sequelize.DATE,
         allowNull: false,
       },
       image: {
