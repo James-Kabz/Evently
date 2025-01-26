@@ -36,11 +36,23 @@ export async function POST(req: NextRequest) {
       user_id,
     } = await req.json();
 
+    const startTime = new Date(start_time);
+    const endTime = new Date(end_time);
+
+    if (start_time > end_time) {
+      return NextResponse.json(
+        { message: "End time must be greater than start time" },
+        { status: 400 }
+      );
+    }
+
+    const utcStartTime = new Date(startTime.toISOString());
+    const utcEndTime = new Date(endTime.toISOString());
     const event = await Event.create({
       name,
       description,
-      start_time,
-      end_time,
+      start_time: utcStartTime,
+      end_time: utcEndTime,
       image,
       location,
       user_id,

@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Form from '@/components/Form'; // Adjust the path to your Form component
 import api from '../../../../../lib/axios'; // Adjust the path to your API setup
 import { ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { showToast } from '@/components/ToastMessage'; // Adjust the path to your toast utility
-// import { useUser } from '@/context/UserContext'; // Adjust the path to your UserContext
+import { User } from '@/db/models/User';
 
 interface FormData {
           name: string;
@@ -20,14 +21,32 @@ interface FormData {
 
 const CreateEventPage: React.FC = () => {
           const router = useRouter();
-          // const { user } = useUser();
           const [formLoading, setFormLoading] = useState<boolean>(false);
+          const [users, setUsers] = useState<User[]>([]);
+
+          // Fetch users from the API
+          useEffect(() => {
+                    const fetchUsers = async () => {
+                              try {
+                                        const response = await api.get('/users'); // Adjust the endpoint to match your API
+                                        if (response?.data?.users) {
+                                                  setUsers(response.data.users);
+                                        } else {
+                                                  throw new Error('Invalid response format');
+                                        }
+                              } catch (error) {
+                                        console.error('Failed to fetch users:', error);
+                                        showToast.error('Failed to fetch users');
+                              }
+                    };
+
+                    fetchUsers();
+          }, []);
 
           const onSubmit = async (data: FormData) => {
                     setFormLoading(true);
                     try {
-                              // Add the user_id to the form data
-                              const eventData = { ...data, };
+                              const eventData = { ...data };
 
                               // Submit the event data to the API
                               await api.post('/events', eventData);
@@ -53,7 +72,14 @@ const CreateEventPage: React.FC = () => {
                     { label: 'end_time', type: 'datetime-local', required: true },
                     { label: 'image', type: 'text', required: true },
                     { label: 'location', type: 'text', required: true },
-                    {label: 'user_id', type: 'number', required: true},
+                    {
+                              label: 'user_id',
+                              type: 'select', // Change to 'select' for dropdown
+                              options: users.map((user) => ({
+                                        label: `${user.name}`,
+                                        value: user.id,
+                              }))
+                    },
           ];
 
           // Define extra buttons (e.g., "Back" button)

@@ -2,7 +2,6 @@
 import React, { forwardRef, JSX, useEffect, useState } from "react";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { Path, useForm, FieldValues, PathValue } from "react-hook-form";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export interface Input {
@@ -75,8 +74,7 @@ const Form = <T extends FieldValues>({
           } = useForm<T>();
 
           const [selectedMultiValue, setSelectedMultiValue] = useState<number[]>([]);
-          const [startDate, setStartDate] = useState<Date | null>(null);
-          const [expirationDate, setExpirationDate] = useState<Date | null>(null);
+          
           const [showPasswordState, setShowPasswordState] = useState<{ [key: string]: boolean }>({});
 
           const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
@@ -108,13 +106,9 @@ const Form = <T extends FieldValues>({
                               if (input.type === "select" && input.value) {
                                         setValue(input.label as Path<T>, input.value as PathValue<T, Path<T>>);
                               }
-                              if (input.type === "date" && input.label === "tokenStartTime" && input.valueDate) {
-                                        setStartDate(new Date(input.valueDate)); // Ensure valid date object
-                                        setValue("tokenStartTime" as Path<T>, new Date(input.valueDate) as PathValue<T, Path<T>>);
-                              }
-                              if (input.type === "date" && input.label === "tokenExpiration" && input.valueDate) {
-                                        setExpirationDate(new Date(input.valueDate)); // Ensure valid date object
-                                        setValue("tokenExpiration" as Path<T>, new Date(input.valueDate) as PathValue<T, Path<T>>);
+                              if (input.type === "datetime-local" && input.valueDate) {
+                                        // Handle datetime-local inputs
+                                        setValue(input.label as Path<T>, input.valueDate.toISOString().slice(0, 16) as PathValue<T, Path<T>>);
                               }
                     });
           }, [Input, setValue]);
@@ -125,21 +119,6 @@ const Form = <T extends FieldValues>({
                               "multiSelectField" as Path<T>,
                               selected as unknown as PathValue<T, Path<T>>
                     );
-          };
-
-          // Handle changes in start date
-          const handleStartDateChange = (date: Date | null) => {
-                    if (date) {
-                              setStartDate(date);
-                              setValue("tokenStartTime" as Path<T>, date as PathValue<T, Path<T>>);
-                    }
-          };
-
-          const handleExpirationDateChange = (date: Date | null) => {
-                    if (date) {
-                              setExpirationDate(date);
-                              setValue("tokenExpiration" as Path<T>, date as PathValue<T, Path<T>>);
-                    }
           };
 
           const togglePasswordVisibility = (id: string) => {
@@ -197,39 +176,16 @@ const Form = <T extends FieldValues>({
                                                                                 ))}
                                                                       </ListboxOptions>
                                                             </Listbox>
-                                                  ) : input.type === "date" && input.label === "tokenStartTime" ? (
-                                                            <div className="w-auto">
-                                                                      <DatePicker
-                                                                                selected={startDate}
-                                                                                onChange={(date: Date | null) => handleStartDateChange(date)}
-                                                                                customInput={<CustomInput />}
-                                                                                showTimeSelect
-                                                                                dateFormat="MMMM d, yyyy h:mm aa"
-                                                                      />
-                                                            </div>
-                                                  ) : input.type === "date" && input.label === "tokenExpiration" ? (
-                                                            <DatePicker
-                                                                      selected={expirationDate}
-                                                                      onChange={(date: Date | null) => handleExpirationDateChange(date)}
-                                                                      customInput={<CustomInput />}
-                                                                      showTimeSelect
-                                                                      dateFormat="MMMM d, yyyy h:mm aa"
+                                                  ) : input.type === "datetime-local" ? (
+                                                            <input
+                                                                      id={input.label}
+                                                                      type="datetime-local"
+                                                                      defaultValue={input.valueDate ? input.valueDate.toISOString().slice(0, 16) : ""}
+                                                                      {...register(input.label as Path<T>, {
+                                                                                required: input.required ? `${input.label} is required` : undefined,
+                                                                      })}
+                                                                      className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                             />
-                                                  ) : input.type === "time" ? (
-                                                            <div className="relative">
-                                                                      <input
-                                                                                type="time"
-                                                                                id={input.label}
-                                                                                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                                                min="09:00"
-                                                                                max="18:00"
-                                                                                defaultValue={input.value}
-                                                                                required
-                                                                                {...register(`${input.label}` as Path<T>, {
-                                                                                          required: input.required ? `${input.label} is required` : undefined,
-                                                                                })}
-                                                                      />
-                                                            </div>
                                                   ) : input.type === "password" ? (
                                                             <div className="relative">
                                                                       <input
