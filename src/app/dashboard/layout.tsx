@@ -3,7 +3,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import {
           RiDashboard2Fill,
-          RiUserLine,
 } from "react-icons/ri";
 import {
           FaUsers,
@@ -167,10 +166,10 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
 
           return (
                     <Suspense fallback={<Loading />}>
-                              <div className="flex h-full min-h-screen bg-background text-foreground">
+                              <div className="flex h-full min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white">
                                         <ToastContainer />
 
-                                        {/* Sidebar for Mobile */}
+                                        {/* Sidebar Overlay */}
                                         {sidebarOpen && (
                                                   <div
                                                             className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -180,165 +179,100 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
 
                                         {/* Sidebar */}
                                         <div
-                                                  className={`fixed top-0 left-0 h-full w-64 bg-secondary text-foreground z-50 transform transition-transform duration-300 lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                                                            }`}
+                                                  className={`fixed top-0 left-0 h-full w-72 bg-gray-800 text-white z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
                                         >
-                                                  <div className="flex items-center justify-between p-1 bg-secondary w-full overflow-x-hidden white-space-nowrap">
-                                                            <div className="flex justify-center items-center">
-                                                                      <Image
-                                                                                className="w-[100px] h-[75px]"
-                                                                                src={istLogo}
-                                                                                alt="ist_logo"
-                                                                                width={150}
-                                                                                height={150}
-                                                                      />
-                                                            </div>
-                                                            <button
-                                                                      className="text-foreground focus:outline-none m-3"
-                                                                      onClick={() => setSidebarOpen(false)}
-                                                            >
-                                                                      <FaTimes size={20} />
+                                                  <div className="flex items-center justify-between p-4 bg-gray-900 shadow-lg">
+                                                            <Image
+                                                                      className="w-[120px] h-[90px]"
+                                                                      src={istLogo}
+                                                                      alt="ist_logo"
+                                                                      width={150}
+                                                                      height={150}
+                                                            />
+                                                            <button className="text-white focus:outline-none" onClick={() => setSidebarOpen(false)}>
+                                                                      <FaTimes size={24} />
                                                             </button>
                                                   </div>
-
-                                                  <nav className="p-4">
-                                                            <div className="max-h-[calc(100vh-4rem)] overflow-y-auto overflow-scroll">
-                                                                      <ul className="space-y-2">
-                                                                                {tabs.map((tab) => (
-                                                                                          <li key={tab.name}>
-                                                                                                    <button
-                                                                                                              onClick={() => handleTabChange(tab.name, 'view')}
-                                                                                                              className={`flex items-center w-full p-2 rounded hover:bg-primary hover:text-white ${activeTab === tab.name ? 'bg-primary text-white' : 'bg-secondary text-foreground'} transition-colors`}
-                                                                                                    >
-                                                                                                              <span>{tab.sideIcon}</span>
-                                                                                                              <span className="ml-2">{tab.name}</span>
-                                                                                                    </button>
-                                                                                          </li>
-                                                                                ))}
-                                                                                {menuItems.map((tab) => (
-                                                                                          <li key={tab.name}>
-                                                                                                    <button
-                                                                                                              onClick={() => handleTabChange(tab.name, 'view')}
-                                                                                                              className={`flex items-center w-full p-2 rounded hover:bg-primary hover:text-white ${activeTab === tab.name ? 'bg-primary text-white' : 'bg-secondary text-foreground'} transition-colors`}
-                                                                                                    >
-                                                                                                              <span>{tab.sideIcon}</span>
-                                                                                                              <span className="ml-2">{tab.name}</span>
-                                                                                                    </button>
-                                                                                          </li>
-                                                                                ))}
-                                                                                <li>
+                                                  <nav className="p-6 space-y-4 overflow-y-auto">
+                                                            <ul className="space-y-3">
+                                                                      {tabs.map((tab) => (
+                                                                                <li key={tab.name}>
                                                                                           <button
-                                                                                                    onClick={handleLogout}
-                                                                                                    className="flex items-center w-full p-2 rounded hover:bg-error hover:text-white transition-colors"
+                                                                                                    onClick={() => handleTabChange(tab.name, 'view')}
+                                                                                                    className={`flex items-center w-full p-3 rounded-lg transition-all duration-300 ease-in-out ${activeTab === tab.name ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-blue-600 hover:text-white'}`}
                                                                                           >
-                                                                                                    <FaPowerOff size={20} />
-                                                                                                    <span className="ml-2">Logout</span>
+                                                                                                    <span className="mr-3">{tab.sideIcon}</span>
+                                                                                                    <span>{tab.name}</span>
                                                                                           </button>
                                                                                 </li>
-                                                                      </ul>
-                                                            </div>
+                                                                      ))}
+                                                                      {menuItems.map((menu) => (
+                                                                                <li key={menu.name}>
+                                                                                          <button
+                                                                                                    onClick={() => handleTabChange(menu.name, 'view')}
+                                                                                                    className="flex items-center w-full p-3 rounded-lg bg-gray-700 hover:bg-blue-600 hover:text-white transition-all duration-300 ease-in-out"
+                                                                                          >
+                                                                                                    <span className="mr-3">{menu.sideIcon}</span>
+                                                                                                    <span>{menu.name}</span>
+                                                                                          </button>
+                                                                                </li>
+                                                                      ))}
+                                                                      <li>
+                                                                                <button
+                                                                                          onClick={handleLogout}
+                                                                                          className="flex items-center w-full p-3 rounded-lg bg-red-600 hover:bg-red-700 transition-all duration-300 ease-in-out"
+                                                                                >
+                                                                                          <FaPowerOff size={20} className="mr-3" />
+                                                                                          <span>Logout</span>
+                                                                                </button>
+                                                                      </li>
+                                                            </ul>
                                                   </nav>
                                         </div>
 
                                         {/* Main Content */}
                                         <div className="flex flex-col flex-1">
                                                   {/* Header */}
-                                                  <header className="flex items-center justify-between bg-secondary text-foreground p-4 lg:hidden">
-                                                            <div className="mb-1 d flex justify-center items-center">
-                                                                      <Image
-                                                                                className="w-[100px] h-[75px]"
-                                                                                src={istLogo}
-                                                                                alt="ist_logo"
-                                                                                width={100}
-                                                                                height={100}
-                                                                      />
-                                                            </div>
-                                                            <button
-                                                                      className="text-foreground focus:outline-none"
-                                                                      onClick={() => setSidebarOpen(true)}
-                                                            >
-                                                                      <FaBars size={24} />
+                                                  <header className="flex items-center justify-between bg-gray-900 text-white p-5 shadow-md lg:hidden">
+                                                            <Image className="w-[120px] h-[90px]" src={istLogo} alt="ist_logo" width={120} height={90} />
+                                                            <button className="text-white focus:outline-none" onClick={() => setSidebarOpen(true)}>
+                                                                      <FaBars size={28} />
                                                             </button>
                                                   </header>
 
-                                                  {/* Top Navigation for Large Screens */}
-                                                  <nav className="hidden lg:flex justify-between bg-secondary text-foreground p-4 shadow-lg">
+                                                  {/* Navigation */}
+                                                  <nav className="hidden lg:flex justify-between bg-gray-900 text-white p-5 shadow-md">
                                                             <ul className="flex w-full items-center justify-between">
                                                                       {tabs.map((tab) => (
                                                                                 <li key={tab.name}>
-                                                                                          <div className="relative group inline-block">
-                                                                                                    <button
-                                                                                                              onClick={() => handleTabChange(tab.name, 'view')}
-                                                                                                              className={`p-2 rounded ${activeTab === tab.name ? 'bg-primary text-white' : 'hover:bg-primary hover:text-white'} transition-colors`}
-                                                                                                    >
-                                                                                                              <div className="flex flex-col items-center">
-                                                                                                                        <span className='m-1'>{tab.icon}</span>
-                                                                                                                        <span className='m-1'>{tab.name}</span>
-                                                                                                              </div>
-                                                                                                    </button>
-                                                                                          </div>
+                                                                                          <button
+                                                                                                    onClick={() => handleTabChange(tab.name, 'view')}
+                                                                                                    className={`p-3 rounded-lg text-lg transition-all duration-300 ease-in-out ${activeTab === tab.name ? 'bg-blue-500' : 'hover:bg-blue-600'}`}
+                                                                                          >
+                                                                                                    {tab.icon}
+                                                                                                    <span className="ml-2">{tab.name}</span>
+                                                                                          </button>
                                                                                 </li>
                                                                       ))}
                                                                       <li>
                                                                                 <button
                                                                                           onClick={() => setMenuOpen(!menuOpen)}
-                                                                                          className="flex flex-col items-center p-2 rounded hover:bg-primary hover:text-white transition-colors"
+                                                                                          className="flex flex-col items-center p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-in-out"
                                                                                 >
-                                                                                          <span><PiUserCircleDuotone size={40} /></span>
-                                                                                          <span className="ml-2">My Profile</span>
+                                                                                          <PiUserCircleDuotone size={40} />
+                                                                                          <span>My Profile</span>
                                                                                 </button>
-                                                                                {menuOpen && (
-                                                                                          <div className="absolute z-10 mt-2 right-0 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 m-4">
-                                                                                                    <div
-                                                                                                              className="py-1 flex flex-col justify-around"
-                                                                                                              role="menu"
-                                                                                                              aria-labelledby="options-menu"
-                                                                                                    >
-                                                                                                              <label
-                                                                                                                        className={`flex flex-row items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer`}
-                                                                                                              >
-                                                                                                                        <div className="flex items-center">
-                                                                                                                                  <span className="m-1"><RiUserLine size={20} /></span>
-                                                                                                                                  <span className="m-1">Username</span>
-                                                                                                                        </div>
-                                                                                                              </label>
-                                                                                                              {menuItems.map((options) => (
-                                                                                                                        <label
-                                                                                                                                  onClick={() => { handleTabChange(options.name, 'view'); setMenuOpen(!menuOpen) }}
-                                                                                                                                  key={options.name}
-                                                                                                                                  className={`flex flex-row items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer`}
-                                                                                                                        >
-                                                                                                                                  <div className="flex items-center">
-                                                                                                                                            <span className="m-1">{options.icon}</span>
-                                                                                                                                            <span className="m-1">{options.name}</span>
-                                                                                                                                  </div>
-                                                                                                                        </label>
-                                                                                                              ))}
-                                                                                                              <label
-                                                                                                                        onClick={() => { handleLogout(); setMenuOpen(!menuOpen) }}
-                                                                                                                        className="flex flex-row items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                                                                                                              >
-                                                                                                                        <div className="flex items-center">
-                                                                                                                                  <span className="m-1">
-                                                                                                                                            <FaPowerOff size={20} />
-                                                                                                                                  </span>
-                                                                                                                                  <span className="m-1">Logout</span>
-                                                                                                                        </div>
-                                                                                                              </label>
-                                                                                                    </div>
-                                                                                          </div>
-                                                                                )}
                                                                       </li>
                                                             </ul>
                                                   </nav>
 
-                                                  {/* Sub-tabs for View/Create */}
+                                                  {/* Sub-tabs */}
                                                   {activeTabDetails && (
-                                                            <div className="bg-secondary p-4 flex space-x-2">
+                                                            <div className="bg-gray-800 p-5 flex space-x-4 shadow-md">
                                                                       {activeTabDetails.viewLabel && (
                                                                                 <button
                                                                                           onClick={() => handleTabChange(activeTab, 'view')}
-                                                                                          className={`p-2 rounded ${currentView === 'view' ? 'bg-primary text-white' : 'bg-background hover:bg-primary hover:text-white'} transition-colors`}
+                                                                                          className={`p-3 rounded-lg transition-all duration-300 ease-in-out ${currentView === 'view' ? 'bg-blue-500 text-white' : 'hover:bg-blue-600'}`}
                                                                                 >
                                                                                           {activeTabDetails.viewLabel}
                                                                                 </button>
@@ -346,7 +280,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                       {activeTabDetails.createLabel && (
                                                                                 <button
                                                                                           onClick={() => handleTabChange(activeTab, 'create')}
-                                                                                          className={`p-2 rounded ${currentView === 'create' ? 'bg-primary text-white' : 'bg-background hover:bg-primary hover:text-white'} transition-colors`}
+                                                                                          className={`p-3 rounded-lg transition-all duration-300 ease-in-out ${currentView === 'create' ? 'bg-blue-500 text-white' : 'hover:bg-blue-600'}`}
                                                                                 >
                                                                                           {activeTabDetails.createLabel}
                                                                                 </button>
@@ -355,16 +289,11 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                   )}
 
                                                   {/* Main Content */}
-                                                  <main className="flex-grow p-2 bg-background text-foreground">
-                                                            {currentView === 'view' && (
-                                                                      <div>
-                                                                                {children}
-                                                                      </div>
-                                                            )}
-
+                                                  <main className="flex-grow p-6 bg-gray-900 text-white">
+                                                            {currentView === 'view' && <div>{children}</div>}
                                                             {currentView === 'create' && (
                                                                       <div>
-                                                                                <h2 className="text-xl font-bold">{activeTabDetails?.createLabel}</h2>
+                                                                                <h2 className="text-2xl font-bold mb-4">{activeTabDetails?.createLabel}</h2>
                                                                                 {children}
                                                                       </div>
                                                             )}
@@ -372,6 +301,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                         </div>
                               </div>
                     </Suspense>
+
           );
 };
 

@@ -42,7 +42,7 @@ export async function PUT(
   { params }: { params: { eventId: string } }
 ) {
   try {
-    const { eventId } = await params; // Await params here
+    const { eventId } = params;
     const updatedFields = await req.json();
 
     const event = await Event.findByPk(eventId);
@@ -51,24 +51,18 @@ export async function PUT(
       return NextResponse.json({ message: "Event not found" }, { status: 404 });
     }
 
-    const allowedFields = [
-      "name",
-      "description",
-      "start_time",
-      "end_time",
-      "image",
-      "location",
-      "user_id",
-    ];
-
-    // Only update allowed fields
-    const filteredUpdates = Object.fromEntries(
-      Object.entries(updatedFields).filter(([key]) =>
-        allowedFields.includes(key)
-      )
-    );
-
-    Object.assign(event, filteredUpdates);
+    // Preserve existing values if the field is not provided in the request
+    event.name = updatedFields.name ?? event.name;
+    event.description = updatedFields.description ?? event.description;
+    event.start_time = updatedFields.start_time
+      ? new Date(updatedFields.start_time)
+      : event.start_time;
+    event.end_time = updatedFields.end_time
+      ? new Date(updatedFields.end_time)
+      : event.end_time;
+    event.image = updatedFields.image ?? event.image;
+    event.location = updatedFields.location ?? event.location;
+    event.user_id = updatedFields.user_id ?? event.user_id;
 
     await event.save();
 

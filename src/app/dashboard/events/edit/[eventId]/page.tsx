@@ -70,12 +70,15 @@ const EditEvent = () => {
           const handleSubmit = async (data: FormData) => {
                     setFormLoading(true);
                     try {
-                              await api.put(`/events/${eventId}`, data);
+                              const formattedData = {
+                                        ...data,
+                                        start_time: new Date(data.start_time).toISOString(),
+                                        end_time: new Date(data.end_time).toISOString(),
+                              };
+                              await api.put(`/events/${eventId}`, formattedData);
                               showToast.success('Event updated successfully!');
-
-                              // Delay the redirect to allow the toast to display
                               setTimeout(() => {
-                                        router.push('/dashboard/events'); // Redirect to the event list
+                                        router.push('/dashboard/events');
                               }, 2000);
                     } catch (err) {
                               console.log(err);
@@ -84,6 +87,7 @@ const EditEvent = () => {
                               setFormLoading(false);
                     }
           };
+
 
           if (loading) return <Loading />;
           if (error) return <div className="text-red-500">{error}</div>;

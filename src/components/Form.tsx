@@ -133,7 +133,7 @@ const Form = <T extends FieldValues>({
           const defaultButtonText = "Submit";
 
           return (
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 space-x-8  bg-gradient-to-br from-gray-50 to-gray-200 py-10">
                               {Input.map((input) => (
                                         <div key={input.label} className="mb-4">
                                                   <label htmlFor={input.label} className="block text-sm font-medium text-gray-700">
