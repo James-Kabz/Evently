@@ -23,7 +23,45 @@ export default function EventsPage() {
                                                   throw new Error('Failed to fetch events');
                                         }
                                         const data = await response.json();
-                                        setEvents(data.events); // Access the `events` array from the response
+                                        const formattedEvents = data.events.map((event: Event) => {
+                                                  const now = new Date(); // Current time
+                                                  const startTime = new Date(event.start_time); // Parse start_time as Date
+                                                  const endTime = new Date(event.end_time); // Parse end_time as Date
+
+                                                  let eventStatus;
+                                                  let statusColor;
+                                                  if (now < startTime) {
+                                                            // Event is upcoming
+                                                            statusColor = "yellow";
+                                                            eventStatus = `Upcoming - Starts on ${startTime.toLocaleString("en-KE", {
+                                                                      weekday: "long",
+                                                                      year: "numeric",
+                                                                      month: "long",
+                                                                      day: "2-digit",
+                                                                      hour: "2-digit",
+                                                                      minute: "2-digit",
+                                                                      hour12: true,
+                                                                      timeZoneName: "short",
+                                                            })}`;
+                                                  } else if (now >= startTime && now <= endTime) {
+                                                            // Event is active
+                                                            eventStatus = "Active";
+                                                            statusColor = "green";
+                                                  } else {
+                                                            // Event has passed
+                                                            eventStatus = "Expired";
+                                                            statusColor = "red";
+                                                  }
+
+                                                  return {
+                                                            ...event,
+                                                            start_time: event.start_time, // Pass the original ISO date string
+                                                            end_time: event.end_time, // Pass the original ISO date string
+                                                            eventStatus,
+                                                            statusColor,
+                                                  };
+                                        });
+                                        setEvents(formattedEvents);
                               } catch (err) {
                                         setError(err instanceof Error ? err.message : 'An error occurred');
                                         showToast.error('Failed to fetch events');
@@ -41,7 +79,7 @@ export default function EventsPage() {
                               await fetch(`http://localhost:3000/api/events/${eventId}`, {
                                         method: 'DELETE',
                               });
-                              setEvents(events.filter(event => event.id !== eventId));
+                              setEvents(events.filter((event) => event.id !== eventId));
                               showToast.success('Event deleted successfully');
                     } catch (err) {
                               console.error('Failed to delete event:', err);
@@ -68,18 +106,19 @@ export default function EventsPage() {
           }
 
           return (
-                    <div className="min-h-screen bg-gray-100 py-10">
+                    <div className=" min-h-screen bg-gray-100 py-10">
                               <ToastContainer /> {/* Include ToastContainer for rendering toasts */}
-                              <div className="container mx-auto px-4">
+                              <div className="mx-auto px-4">
                                         <h1 className="text-3xl font-bold text-center mb-8">Upcoming Events</h1>
-                                        <button>
-
-                                        </button>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 m-36 gap-6">
                                                   {events.map((event) => (
                                                             <Card
                                                                       key={event.id}
-                                                                      event={event}
+                                                                      event={{
+                                                                                ...event,
+                                                                                eventStatus: event.eventStatus, // Pass event status
+                                                                                statusColor: event.statusColor, // Pass status color
+                                                                      }}
                                                                       onView={handleView}
                                                                       onEdit={handleEdit}
                                                                       onDelete={handleDelete}
