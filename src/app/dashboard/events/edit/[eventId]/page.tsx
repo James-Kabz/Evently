@@ -18,30 +18,48 @@ interface FormData {
           end_time: string;
           image: string;
           location: string;
-          user_id: string; // Add user_id to FormData
+          user_id: string;
 }
 
 const EditEvent = () => {
           const router = useRouter();
-          const { eventId } = useParams(); // Get the `eventId` from the URL
-          const [event, setEvent] = useState<Event | null>(null);
+          const { eventId } = useParams();
+          const [, setEvent] = useState<Event | null>(null);
           const [users, setUsers] = useState<User[]>([]);
           const [loading, setLoading] = useState<boolean>(true);
           const [end_time, setEventEndTime] = useState<Date | null>(null);
           const [start_time, setEventStartTime] = useState<Date | null>(null);
+          const [formData, setFormData] = useState<FormData>({
+                    name: '',
+                    description: '',
+                    start_time: '',
+                    end_time: '',
+                    image: '',
+                    location: '',
+                    user_id: ''
+          });
           const [error, setError] = useState<string | null>(null);
           const [formLoading, setFormLoading] = useState<boolean>(false);
 
-          // Fetch event and users data on mount
           useEffect(() => {
                     if (eventId) {
                               const fetchEvent = async () => {
                                         try {
                                                   const response = await api.get(`/events/${eventId}`);
                                                   const event = response.data.event;
-                                                  setEvent(response.data.event); // Correctly access `event` from the response
+                                                  setEvent(event);
                                                   setEventStartTime(new Date(event.start_time));
                                                   setEventEndTime(new Date(event.end_time));
+                                                  // Update formData with event data
+                                                  setFormData({
+                                                            name: event.name || '',
+                                                            description: event.description || '',
+                                                            start_time: event.start_time ? new Date(event.start_time).toISOString().slice(0, 16) : '',
+                                                            end_time: event.end_time ? new Date(event.end_time).toISOString().slice(0, 16) : '',
+                                                            image: event.image || '',
+                                                            location: event.location || '',
+                                                            user_id: event.user_id?.toString() || ''
+                                                  });
                                         } catch (err) {
                                                   console.log(err);
                                                   setError('Failed to fetch event');
@@ -49,7 +67,6 @@ const EditEvent = () => {
                                                   setLoading(false);
                                         }
                               };
-                              fetchEvent();
 
                               const fetchUsers = async () => {
                                         try {
@@ -58,15 +75,14 @@ const EditEvent = () => {
                                         } catch (err) {
                                                   console.log(err);
                                                   setError('Failed to fetch users');
-                                        } finally {
-                                                  setLoading(false);
                                         }
                               };
+
+                              fetchEvent();
                               fetchUsers();
                     }
           }, [eventId]);
 
-          // Handle form submission
           const handleSubmit = async (data: FormData) => {
                     setFormLoading(true);
                     try {
@@ -88,23 +104,19 @@ const EditEvent = () => {
                     }
           };
 
-
           if (loading) return <Loading />;
           if (error) return <div className="text-red-500">{error}</div>;
-
-          // Format dates for the date input fields
-
 
           const inputs = [
                     {
                               label: "name",
                               type: "text",
-                              value: event?.name || '',
+                              value: formData.name,
                     },
                     {
                               label: "description",
                               type: "text",
-                              value: event?.description || '',
+                              value: formData.description,
                     },
                     {
                               label: "start_time",
@@ -119,17 +131,17 @@ const EditEvent = () => {
                     {
                               label: "image",
                               type: "text",
-                              value: event?.image || '',
+                              value: formData.image,
                     },
                     {
                               label: "location",
                               type: "text",
-                              value: event?.location || '',
+                              value: formData.location,
                     },
                     {
                               label: "user",
                               type: "select",
-                              value: event?.user_id?.toString() || '', // Use user_id as the value
+                              value: formData.user_id,
                               options: users.map((user) => ({
                                         label: user.name,
                                         value: user.id.toString(),
@@ -147,7 +159,7 @@ const EditEvent = () => {
 
           return (
                     <div className="p-6">
-                              <ToastContainer /> {/* Add the ToastContainer to render toast notifications */}
+                              <ToastContainer />
                               <h3 className="text-2xl font-bold mb-4">Edit Event</h3>
                               <Form<FormData>
                                         Input={inputs}

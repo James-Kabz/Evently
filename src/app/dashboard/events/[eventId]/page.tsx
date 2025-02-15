@@ -48,9 +48,10 @@ export default function EventDetailPage() {
                                                   <h1 className="text-4xl font-bold text-gray-900 mb-4">{event?.name}</h1>
                                                   <p className="text-gray-700 text-lg mb-6">{event?.description}</p>
                                                   <div className="space-y-4">
-                                                            <p className="text-lg"><strong className="text-gray-900">Location:</strong> {event?.location}</p>
-                                                            <p className="text-lg"><strong className="text-gray-900">Starts:</strong> {new Date(event?.start_time || "").toLocaleString()}</p>
-                                                            <p className="text-lg"><strong className="text-gray-900">Ends:</strong> {new Date(event?.end_time || "").toLocaleString()}</p>
+                                                            <p className="text-lg text-gray-500"><strong className="text-gray-900">Location:</strong> {event?.location}</p>
+                                                            <p className="text-lg text-gray-500"><strong className="text-gray-900">Starts:</strong> {new Date(event?.start_time || "").toLocaleString()}</p>
+                                                            <p className="text-lg text-gray-500
+                                                            "><strong className="text-gray-900">Ends:</strong> {new Date(event?.end_time || "").toLocaleString()}</p>
                                                   </div>
                                                   <div className="mt-6 flex justify-between">
                                                             <button

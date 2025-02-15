@@ -177,9 +177,9 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                   ></div>
                                         )}
 
-                                        {/* Sidebar */}
                                         <div
-                                                  className={`fixed top-0 left-0 h-full w-72 bg-gray-800 text-white z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                                                  className={`fixed top-0 left-0 h-screen w-screen lg:hidden bg-gray-800 text-white z-50 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                                                            }`}
                                         >
                                                   <div className="flex items-center justify-between p-4 bg-gray-900 shadow-lg">
                                                             <Image
@@ -193,7 +193,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                       <FaTimes size={24} />
                                                             </button>
                                                   </div>
-                                                  <nav className="p-6 space-y-4 overflow-y-auto">
+                                                  <nav className="p-6 space-y-4 overflow-y-auto h-[calc(100vh-8rem)]">
                                                             <ul className="space-y-3">
                                                                       {tabs.map((tab) => (
                                                                                 <li key={tab.name}>
@@ -260,7 +260,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                                           className="flex flex-col items-center p-3 rounded-lg hover:bg-blue-600 transition-all duration-300 ease-in-out"
                                                                                 >
                                                                                           <PiUserCircleDuotone size={40} />
-                                                                                          <span>My Profile</span>
+                                                                                          <span className="mt-1">My Profile</span>
                                                                                 </button>
                                                                       </li>
                                                             </ul>
@@ -268,11 +268,11 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
 
                                                   {/* Sub-tabs */}
                                                   {activeTabDetails && (
-                                                            <div className="bg-gray-800 p-5 flex space-x-4 shadow-md">
+                                                            <div className="bg-gray-800 p-5 flex space-x-4 shadow-md overflow-x-auto">
                                                                       {activeTabDetails.viewLabel && (
                                                                                 <button
                                                                                           onClick={() => handleTabChange(activeTab, 'view')}
-                                                                                          className={`p-3 rounded-lg transition-all duration-300 ease-in-out ${currentView === 'view' ? 'bg-blue-500 text-white' : 'hover:bg-blue-600'}`}
+                                                                                          className={`p-3 rounded-lg transition-all duration-300 ease-in-out whitespace-nowrap ${currentView === 'view' ? 'bg-blue-500 text-white' : 'hover:bg-blue-600'}`}
                                                                                 >
                                                                                           {activeTabDetails.viewLabel}
                                                                                 </button>
@@ -280,7 +280,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                                       {activeTabDetails.createLabel && (
                                                                                 <button
                                                                                           onClick={() => handleTabChange(activeTab, 'create')}
-                                                                                          className={`p-3 rounded-lg transition-all duration-300 ease-in-out ${currentView === 'create' ? 'bg-blue-500 text-white' : 'hover:bg-blue-600'}`}
+                                                                                          className={`p-3 rounded-lg transition-all duration-300 ease-in-out whitespace-nowrap ${currentView === 'create' ? 'bg-blue-500 text-white' : 'hover:bg-blue-600'}`}
                                                                                 >
                                                                                           {activeTabDetails.createLabel}
                                                                                 </button>
@@ -289,7 +289,7 @@ const EventsTicketsDashboardLayout: React.FC<EventsTicketsDashboardLayoutProps> 
                                                   )}
 
                                                   {/* Main Content */}
-                                                  <main className="flex-grow p-6 bg-gray-900 text-white">
+                                                  <main className="flex-grow p-6 bg-gray-900 text-white overflow-y-auto">
                                                             {currentView === 'view' && <div>{children}</div>}
                                                             {currentView === 'create' && (
                                                                       <div>

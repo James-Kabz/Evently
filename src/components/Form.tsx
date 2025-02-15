@@ -133,7 +133,10 @@ const Form = <T extends FieldValues>({
           const defaultButtonText = "Submit";
 
           return (
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 space-x-8  bg-gradient-to-br from-gray-50 to-gray-200 py-10">
+                    <form
+                              onSubmit={handleSubmit(onSubmit)}
+                              className="space-y-6 bg-gradient-to-br from-gray-50 to-gray-200 text-black p-4 sm:p-6 rounded-lg shadow"
+                    >
                               {Input.map((input) => (
                                         <div key={input.label} className="mb-4">
                                                   <label htmlFor={input.label} className="block text-sm font-medium text-gray-700">
@@ -146,7 +149,7 @@ const Form = <T extends FieldValues>({
                                                                       {...register(input.label as Path<T>, {
                                                                                 required: input.required ? `${input.label} is required` : undefined,
                                                                       })}
-                                                                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                             >
                                                                       <option value="">Select {input.label}</option>
                                                                       {input.options?.map((option) => (
@@ -184,7 +187,7 @@ const Form = <T extends FieldValues>({
                                                                       {...register(input.label as Path<T>, {
                                                                                 required: input.required ? `${input.label} is required` : undefined,
                                                                       })}
-                                                                      className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                             />
                                                   ) : input.type === "password" ? (
                                                             <div className="relative">
@@ -198,7 +201,7 @@ const Form = <T extends FieldValues>({
                                                                                           minLength: input.validation?.minLength,
                                                                                           maxLength: input.validation?.maxLength,
                                                                                 })}
-                                                                                className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                                       />
                                                                       <button
                                                                                 type="button"
@@ -251,7 +254,7 @@ const Form = <T extends FieldValues>({
                                                                                 required: input.required ? `${input.label} is required` : undefined,
                                                                                 pattern: input.validation?.pattern,
                                                                       })}
-                                                                      className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                      className="mt-1 block w-full p-2 border  border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                             />
                                                   ) : (
                                                             <input
@@ -262,7 +265,7 @@ const Form = <T extends FieldValues>({
                                                                                 required: input.required ? `${input.label} is required` : undefined,
                                                                                 pattern: input.validation?.pattern,
                                                                       })}
-                                                                      className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                                             />
                                                   )}
 
@@ -274,11 +277,11 @@ const Form = <T extends FieldValues>({
                                         </div>
                               ))}
 
-                              <div className="flex space-x-4">
+                              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                                         {buttonVisible && (
                                                   <button
                                                             type="submit"
-                                                            className={`${buttonColor || defaultButtonColor} text-white px-4 py-2 rounded ${hoverColor || defaultHoverColor} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                            className={`${buttonColor || defaultButtonColor} text-white px-4 py-2 rounded ${hoverColor || defaultHoverColor} ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                                                             disabled={loading}
                                                   >
                                                             {loading ? (
@@ -315,7 +318,7 @@ const Form = <T extends FieldValues>({
                                                   <button
                                                             key={index}
                                                             type="button"
-                                                            className={`${button.buttonColor || buttonColor || defaultButtonColor} text-white px-4 py-2 rounded ${button.hoverColor || hoverColor || defaultHoverColor} ${button.buttonLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                            className={`${button.buttonColor || buttonColor || defaultButtonColor} text-white px-4 py-2 rounded ${button.hoverColor || hoverColor || defaultHoverColor} ${button.buttonLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                                                             onClick={button.onClick}
                                                             disabled={button.buttonLoading}
                                                   >

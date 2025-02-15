@@ -1,8 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import "ts-node/register";
 import dotenv from "dotenv";
-
-dotenv.config(); // Load environment variables from .env
+dotenv.config();
 
 export const options = {
   username: process.env.DB_USERNAME,
