@@ -36,10 +36,20 @@ export async function POST(req: NextRequest) {
       user_id,
     } = await req.json();
 
+    console.log("Received data:", {
+      name,
+      description,
+      start_time,
+      end_time,
+      image,
+      location,
+      user_id,
+    });
+
     const startTime = new Date(start_time);
     const endTime = new Date(end_time);
 
-    if (start_time > end_time) {
+    if (startTime > endTime) {
       return NextResponse.json(
         { message: "End time must be greater than start time" },
         { status: 400 }
@@ -48,6 +58,9 @@ export async function POST(req: NextRequest) {
 
     const utcStartTime = new Date(startTime.toISOString());
     const utcEndTime = new Date(endTime.toISOString());
+
+    console.log("Parsed dates:", { utcStartTime, utcEndTime });
+
     const event = await Event.create({
       name,
       description,
@@ -58,6 +71,8 @@ export async function POST(req: NextRequest) {
       user_id,
     });
 
+    console.log("Event created:", event);
+
     return NextResponse.json({
       message: "Event Created Successfully",
       event,
@@ -65,7 +80,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
-    console.error("Error submitting events");
+    console.error("Error submitting events:", errorMessage);
     return NextResponse.json(
       { message: "Failed to submit event", error: errorMessage },
       { status: 500 }

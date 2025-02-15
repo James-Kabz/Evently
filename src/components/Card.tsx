@@ -23,9 +23,9 @@ const Card: React.FC<CardProps> = ({ event, onView, onEdit, onDelete }) => {
           };
 
           return (
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                    <div className="bg-white text-black rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                               {/* Event Image */}
-                              <div className="relative h-64 w-full">
+                              <div className="relative h-48 sm:h-64 w-full">
                                         <Image
                                                   src={event.image}
                                                   alt={event.name}
@@ -36,50 +36,52 @@ const Card: React.FC<CardProps> = ({ event, onView, onEdit, onDelete }) => {
                               </div>
 
                               {/* Card Content */}
-                              <div className="p-6">
+                              <div className="p-4 sm:p-6">
                                         {/* Event Name */}
-                                        <h2 className="text-2xl font-bold text-gray-800 mb-4">{event.name}</h2>
+                                        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">
+                                                  {event.name}
+                                        </h2>
 
                                         {/* Event Description */}
-                                        <p className="text-gray-600 mb-6 text-lg line-clamp-3">
+                                        <p className="text-gray-600 mb-4 sm:mb-6 text-base sm:text-lg line-clamp-3">
                                                   {truncateDescription(event.description, 30)} {/* Limit to 30 words */}
                                         </p>
 
                                         {/* Event Metadata */}
-                                        <div className="space-y-4 mb-6">
+                                        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                                                   {/* Event Time */}
-                                                  <p className="text-gray-600 text-lg">
+                                                  <p className="text-gray-600 text-base sm:text-lg">
                                                             <span className="font-semibold">Time:</span> {new Date(event.start_time).toLocaleString()} -{' '}
                                                             {new Date(event.end_time).toLocaleString()}
                                                   </p>
 
                                                   {/* Event Location */}
-                                                  <p className="text-gray-600 text-lg">
+                                                  <p className="text-gray-600 text-base sm:text-lg">
                                                             <span className="font-semibold">Location:</span> {event.location}
                                                   </p>
 
                                                   {/* Event Organizer */}
-                                                  <p className="text-gray-600 text-lg">
+                                                  <p className="text-gray-600 text-base sm:text-lg">
                                                             <span className="font-semibold">Organizer:</span> {event.user?.name || 'Unknown'}
                                                   </p>
                                         </div>
 
                                         {/* Event Status */}
-                                        <div className="mb-6">
+                                        <div className="mb-4 sm:mb-6">
                                                   <span
-                                                            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold text-white bg-${event.statusColor}-500`}
+                                                            className={`inline-block px-3 py-1 sm:px-4 sm:py-2 rounded-full text-sm font-semibold text-white bg-${event.statusColor}-500`}
                                                   >
                                                             {event.eventStatus}
                                                   </span>
                                         </div>
 
                                         {/* Event Created At */}
-                                        <p className="text-gray-500 text-sm mt-4">
+                                        <p className="text-gray-500 text-xs sm:text-sm mt-3 sm:mt-4">
                                                   Created on: {new Date(event.createdAt).toLocaleDateString()}
                                         </p>
 
                                         {/* Action Buttons */}
-                                        <div className="flex gap-4 mt-6">
+                                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 sm:mt-6">
                                                   <button
                                                             onClick={() => onView(event)}
                                                             className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300"

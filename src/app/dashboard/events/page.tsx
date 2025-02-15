@@ -106,11 +106,16 @@ export default function EventsPage() {
           }
 
           return (
-                    <div className=" min-h-screen bg-gray-100 py-10">
+                    <div className="min-h-screen bg-gray-100 text-black py-6 sm:py-10">
                               <ToastContainer /> {/* Include ToastContainer for rendering toasts */}
-                              <div className="mx-auto px-4">
-                                        <h1 className="text-3xl font-bold text-center mb-8">Upcoming Events</h1>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 m-36 gap-6">
+                              <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-8xl">
+                                        {/* Heading */}
+                                        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">
+                                                  Upcoming Events
+                                        </h1>
+
+                                        {/* Event Grid */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                                                   {events.map((event) => (
                                                             <Card
                                                                       key={event.id}

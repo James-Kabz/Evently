@@ -42,7 +42,7 @@ export async function PUT(
   { params }: { params: { eventId: string } }
 ) {
   try {
-    const { eventId } = params;
+    const { eventId } = await params;
     const updatedFields = await req.json();
 
     const event = await Event.findByPk(eventId);

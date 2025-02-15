@@ -92,9 +92,11 @@ const CreateEventPage: React.FC = () => {
           ];
 
           return (
-                    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
-                              <ToastContainer />
-                              <h2 className="text-2xl font-bold mb-4">Create New Event</h2>
+                    <div className="w-full max-w-md mx-auto bg-white p-4 sm:p-6 rounded-lg shadow">
+                              <ToastContainer position="top-right" autoClose={3000} />
+                              <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center sm:text-left">
+                                        Create New Event
+                              </h2>
                               <Form<FormData>
                                         Input={inputs}
                                         onSubmit={onSubmit}
