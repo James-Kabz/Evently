@@ -1,5 +1,4 @@
-import { Event } from "@/db/models/Event";
-import { User } from "@/db/models/User";
+import { Event, User, TicketType } from "../../../../db/models/index";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET - Fetch an Event by ID
@@ -17,6 +16,11 @@ export async function GET(
           model: User,
           as: "user",
           attributes: ["id", "email"],
+        },
+        {
+          model: TicketType,
+          as: "ticketTypes",
+          attributes: ["id", "name", "price", "complimentary", "active"],
         },
       ],
     });

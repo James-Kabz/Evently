@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       error instanceof Error ? error.message : "Unknown error";
     console.error("Error submitting ticket types");
     return NextResponse.json(
-      { message: "Failed to submit ticket typess", error: errorMessage },
+      { message: "Failed to submit ticket types", error: errorMessage },
       { status: 500 }
     );
   }

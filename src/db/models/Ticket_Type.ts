@@ -52,7 +52,7 @@ TicketType.init(
     event_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: Event,
+        model: "Event",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -67,11 +67,11 @@ TicketType.init(
   }
 );
 
-TicketType.belongsTo(User, {
-  foreignKey: "user_id",
-  as: "user",
-});
-TicketType.belongsTo(Event, {
-  foreignKey: "event_id",
-  as: "event",
-});
+// TicketType.belongsTo(User, {
+//   foreignKey: "user_id",
+//   as: "user",
+// });
+// TicketType.belongsTo(Event, {
+//   foreignKey: "event_id",
+//   as: "event",
+// });

@@ -83,12 +83,12 @@ Ticket.init(
   }
 );
 
-Ticket.belongsTo(TicketType, {
-  foreignKey: "ticket_type_id",
-  as: "ticket_type",
-});
+// Ticket.belongsTo(TicketType, {
+//   foreignKey: "ticket_type_id",
+//   as: "ticket_type",
+// });
 
-Ticket.belongsTo(Event, {
-  foreignKey: "event_id",
-  as: "event",
-});
+// Ticket.belongsTo(Event, {
+//   foreignKey: "event_id",
+//   as: "event",
+// });
