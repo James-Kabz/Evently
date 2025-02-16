@@ -19,10 +19,21 @@ interface FormData {
           user_id: number;
 }
 
+interface TicketTypeFormData {
+          name: string;
+          price: number;
+          complimentary: boolean;
+          active: boolean;
+          user_id: number;
+          event_id: number;
+}
+
 const CreateEventPage: React.FC = () => {
           const router = useRouter();
           const [formLoading, setFormLoading] = useState<boolean>(false);
           const [users, setUsers] = useState<User[]>([]);
+          const [step, setStep] = useState<number>(1);
+          const [eventId, setEventId] = useState<number | null>(null);
 
           // Fetch users from the API
           useEffect(() => {
@@ -43,19 +54,16 @@ const CreateEventPage: React.FC = () => {
                     fetchUsers();
           }, []);
 
-          const onSubmit = async (data: FormData) => {
+          const onSubmitEvent = async (data: FormData) => {
                     setFormLoading(true);
                     try {
                               const eventData = { ...data };
 
                               // Submit the event data to the API
-                              await api.post('/events', eventData);
+                              const response = await api.post('/events', eventData);
+                              setEventId(response.data.id); // Assuming the API returns the created event ID
                               showToast.success('Event created successfully!');
-
-                              // Redirect to the events page after a short delay
-                              setTimeout(() => {
-                                        router.push('/dashboard/events');
-                              }, 2000);
+                              setStep(2); // Move to the next step
                     } catch (error) {
                               console.error('Failed to create event', error);
                               showToast.error('Failed to create event');
@@ -64,8 +72,29 @@ const CreateEventPage: React.FC = () => {
                     }
           };
 
-          // Define the form inputs
-          const inputs = [
+          const onSubmitTicketType = async (data: TicketTypeFormData) => {
+                    setFormLoading(true);
+                    try {
+                              const ticketTypeData = { ...data, event_id: eventId };
+
+                              // Submit the ticket type data to the API
+                              await api.post('/ticketTypes', ticketTypeData);
+                              showToast.success('Ticket type created successfully!');
+
+                              // Redirect to the events page after a short delay
+                              setTimeout(() => {
+                                        router.push('/dashboard/events');
+                              }, 2000);
+                    } catch (error) {
+                              console.error('Failed to create ticket type', error);
+                              showToast.error('Failed to create ticket type');
+                    } finally {
+                              setFormLoading(false);
+                    }
+          };
+
+          // Define the form inputs for the event creation step
+          const eventInputs = [
                     { label: 'name', type: 'text', required: true },
                     { label: 'description', type: 'text', required: true },
                     { label: 'start_time', type: 'datetime-local', required: true },
@@ -78,8 +107,16 @@ const CreateEventPage: React.FC = () => {
                               options: users.map((user) => ({
                                         label: `${user.name}`,
                                         value: user.id,
-                              }))
+                              })),
                     },
+          ];
+
+          // Define the form inputs for the ticket type creation step
+          const ticketTypeInputs = [
+                    { label: 'name', type: 'text', required: true },
+                    { label: 'price', type: 'number', required: true },
+                    { label: 'complimentary', type: 'checkbox', required: false },
+                    { label: 'active', type: 'checkbox', required: false },
           ];
 
           // Define extra buttons (e.g., "Back" button)
@@ -87,7 +124,7 @@ const CreateEventPage: React.FC = () => {
                     {
                               label: 'Back',
                               type: 'button',
-                              onClick: () => router.push('/dashboard/events'),
+                              onClick: () => (step === 1 ? router.push('/dashboard/events') : setStep(1)),
                     },
           ];
 
@@ -95,14 +132,23 @@ const CreateEventPage: React.FC = () => {
                     <div className="w-full max-w-md mx-auto bg-white p-4 sm:p-6 rounded-lg shadow">
                               <ToastContainer position="top-right" autoClose={3000} />
                               <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center sm:text-left">
-                                        Create New Event
+                                        {step === 1 ? 'Create New Event' : 'Add Ticket Type'}
                               </h2>
-                              <Form<FormData>
-                                        Input={inputs}
-                                        onSubmit={onSubmit}
-                                        loading={formLoading}
-                                        addButton={extraButtons}
-                              />
+                              {step === 1 ? (
+                                        <Form<FormData>
+                                                  Input={eventInputs}
+                                                  onSubmit={onSubmitEvent}
+                                                  loading={formLoading}
+                                                  addButton={extraButtons}
+                                        />
+                              ) : (
+                                        <Form<TicketTypeFormData>
+                                                  Input={ticketTypeInputs}
+                                                  onSubmit={onSubmitTicketType}
+                                                  loading={formLoading}
+                                                  addButton={extraButtons}
+                                        />
+                              )}
                     </div>
           );
 };
