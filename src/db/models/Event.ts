@@ -1,6 +1,7 @@
 import sequelize from "../db_connection";
 import { DataTypes, Model } from "sequelize";
 import { User } from "./User";
+// import { TicketType } from "./Ticket_Type";
 
 export class Event extends Model {
   id!: number;
@@ -13,6 +14,7 @@ export class Event extends Model {
   user_id!: number;
 
   user?: User;
+  event?: Event;
 }
 
 Event.init(
@@ -66,8 +68,12 @@ Event.init(
   }
 );
 
-// associations
+// // associations
 Event.belongsTo(User, {
   foreignKey: "user_id",
   as: "user",
 });
+// Event.hasMany(TicketType, {
+//   foreignKey: "event_id",
+//   as: "ticketTypes",
+// })

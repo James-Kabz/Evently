@@ -5,11 +5,13 @@ import { Path, useForm, FieldValues, PathValue } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 
 export interface Input {
+          onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Add this line
           label: string;
           type: string;
           required?: boolean;
           readonly?: boolean;
           value?: string | number;
+          checked? : boolean;
           valueDate?: Date | null;
           name?: string;
           defaultSelect?: number[];
