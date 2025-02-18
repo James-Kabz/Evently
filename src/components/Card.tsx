@@ -1,6 +1,7 @@
 // components/Card.tsx
 import Image from 'next/image';
 import { Event } from '@/types'; // Adjust the path to your Event type definition
+import { FaCalendar, FaCheckCircle, FaClock, FaLocationArrow, FaTimesCircle } from 'react-icons/fa';
 
 interface CardProps {
           event: Event & {
@@ -13,19 +14,19 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ event, onView, onEdit, onDelete }) => {
-          // Function to truncate the description to 30 words
-          const truncateDescription = (text: string, maxWords: number) => {
-                    const words = text.split(' ');
-                    if (words.length > maxWords) {
-                              return words.slice(0, maxWords).join(' ') + '...'; // Add ellipsis if truncated
-                    }
-                    return text;
-          };
+          // // Function to truncate the description to 30 words
+          // const truncateDescription = (text: string, maxWords: number) => {
+          //           const words = text.split(' ');
+          //           if (words.length > maxWords) {
+          //                     return words.slice(0, maxWords).join(' ') + '...'; // Add ellipsis if truncated
+          //           }
+          //           return text;
+          // };
 
           return (
-                    <div className="bg-white text-black rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                    <div className="bg-white text-black rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg w-full">
                               {/* Event Image */}
-                              <div className="relative h-48 sm:h-64 w-full">
+                              <div className="relative h-56 w-full">
                                         <Image
                                                   src={event.image}
                                                   alt={event.name}
@@ -36,73 +37,67 @@ const Card: React.FC<CardProps> = ({ event, onView, onEdit, onDelete }) => {
                               </div>
 
                               {/* Card Content */}
-                              <div className="p-4 sm:p-6">
+                              <div className="p-3">
                                         {/* Event Name */}
-                                        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">
-                                                  {event.name}
-                                        </h2>
-
-                                        {/* Event Description */}
-                                        <p className="text-gray-600 mb-4 sm:mb-6 text-base sm:text-lg line-clamp-3">
-                                                  {truncateDescription(event.description, 30)} {/* Limit to 30 words */}
-                                        </p>
+                                        <h2 className="sm:text-md lg:text-xl font-extrabold text-gray-800 truncate">{event.name}</h2>
 
                                         {/* Event Metadata */}
-                                        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                                        <div className="text-gray-600 text-sm mt-2 space-y-4">
                                                   {/* Event Time */}
-                                                  <p className="text-gray-600 text-base sm:text-lg">
-                                                            <span className="font-semibold">Time:</span> {new Date(event.start_time).toLocaleString()} -{' '}
-                                                            {new Date(event.end_time).toLocaleString()}
+                                                  <p className="flex items-center gap-1">
+                                                            <FaCalendar className="text-indigo-500 text-2xl" />
+                                                            {new Date(event.start_time).toLocaleDateString()}
                                                   </p>
 
                                                   {/* Event Location */}
-                                                  <p className="text-gray-600 text-base sm:text-lg">
-                                                            <span className="font-semibold">Location:</span> {event.location}
-                                                  </p>
-
-                                                  {/* Event Organizer */}
-                                                  <p className="text-gray-600 text-base sm:text-lg">
-                                                            <span className="font-semibold">Organizer:</span> {event.user?.name || 'Unknown'}
+                                                  <p className="flex items-center gap-1">
+                                                            <FaLocationArrow className="text-red-500 text-2xl" />
+                                                            {event.location}
                                                   </p>
                                         </div>
 
                                         {/* Event Status */}
-                                        <div className="mb-4 sm:mb-6">
+                                        <div className="mt-2 flex items-center">
                                                   <span
-                                                            className={`inline-block px-3 py-1 sm:px-4 sm:py-2 rounded-full text-sm font-semibold text-white bg-${event.statusColor}-500`}
+                                                            className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md transition-all duration-300 
+      ${event.statusColor === "green" ? "bg-green-500 animate-pulse shadow-green-400/50" : ""}
+      ${event.statusColor === "red" ? "bg-red-500 shadow-red-400/50" : ""}
+      ${event.statusColor === "yellow" ? "bg-yellow-500 shadow-yellow-400/50" : ""}
+      ${event.statusColor === "blue" ? "bg-blue-500 shadow-blue-400/50" : ""}`}
                                                   >
-                                                            {event.eventStatus}
+                                                            {event.eventStatus === "Active" && <span className="w-2 h-2 bg-white rounded-full animate-ping"></span>}
+                                                            {event.eventStatus === "Upcoming" && <FaClock className="text-white text-sm" />}
+                                                            {event.eventStatus === "Cancelled" && <FaTimesCircle className="text-white text-sm" />}
+                                                            {event.eventStatus === "Completed" && <FaCheckCircle className="text-white text-sm" />}
+                                                            <span>{event.eventStatus}</span>
                                                   </span>
                                         </div>
 
-                                        {/* Event Created At */}
-                                        <p className="text-gray-500 text-xs sm:text-sm mt-3 sm:mt-4">
-                                                  Created on: {new Date(event.createdAt).toLocaleDateString()}
-                                        </p>
 
                                         {/* Action Buttons */}
-                                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 sm:mt-6">
+                                        <div className="flex justify-between gap-1 mt-3">
                                                   <button
                                                             onClick={() => onView(event)}
-                                                            className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300"
+                                                            className="flex-1 px-2 py-1 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition"
                                                   >
                                                             View
                                                   </button>
                                                   <button
                                                             onClick={() => onEdit(event)}
-                                                            className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors duration-300"
+                                                            className="flex-1 px-2 py-1 bg-yellow-500 text-white rounded-md text-xs hover:bg-yellow-600 transition"
                                                   >
                                                             Edit
                                                   </button>
                                                   <button
                                                             onClick={() => onDelete(event.id)}
-                                                            className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
+                                                            className="flex-1 px-2 py-1 bg-red-500 text-white rounded-md text-xs hover:bg-red-600 transition"
                                                   >
                                                             Delete
                                                   </button>
                                         </div>
                               </div>
                     </div>
+
           );
 };
 
