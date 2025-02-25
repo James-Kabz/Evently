@@ -67,6 +67,7 @@ TicketType.init(
   }
 );
 
+export default TicketType;
 // TicketType.belongsTo(User, {
 //   foreignKey: "user_id",
 //   as: "user",

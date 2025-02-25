@@ -68,6 +68,7 @@ Event.init(
   }
 );
 
+export default Event;
 // // associations
 Event.belongsTo(User, {
   foreignKey: "user_id",
