@@ -47,7 +47,11 @@ const EditTicketTypes = () => {
           const handleTicketTypeSubmit = async (data: TicketTypeFormData) => {
                     setFormLoading(true);
                     try {
-                              await api.put(`/ticketTypes/${ticketTypeId}`, data);
+
+                        const formattedData = {
+                            ...data,
+                        }
+                              await api.put(`/ticketTypes/${ticketTypeId}`, formattedData);
                               showToast.success('Ticket type updated successfully!');
                               setTimeout(() => {
                                         router.push(`/dashboard/events/${eventId}`);

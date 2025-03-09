@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { eventId: string } }
 ) {
   try {
-    const { eventId } = params; // Destructure eventId from params
+    const { eventId } = await params; // Destructure eventId from params
 
     // Fetch the event to ensure it exists
     const event = await Event.findOne({
