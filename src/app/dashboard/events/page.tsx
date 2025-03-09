@@ -99,6 +99,12 @@ export default function EventsPage() {
                     router.push(`/dashboard/events/${event.id}`);
           };
 
+          // Handle ticket types editing
+          const handleEditTicketTypes = (eventId: number) => {
+                    showToast.info('Redirecting to edit ticket types...');
+                    router.push(`/dashboard/events/${eventId}/ticket-types`);
+          };
+
           if (loading) return <Loading />;
 
           if (error) {
@@ -127,6 +133,7 @@ export default function EventsPage() {
                                                                       onView={handleView}
                                                                       onEdit={handleEdit}
                                                                       onDelete={handleDelete}
+                                                                      onEditTicketTypes={handleEditTicketTypes} 
                                                             />
                                                   ))}
                                         </div>
